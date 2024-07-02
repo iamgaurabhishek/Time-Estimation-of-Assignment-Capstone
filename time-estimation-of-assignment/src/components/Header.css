@@ -1,0 +1,19 @@
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: red;
+    padding: 1%;
+}
+.logo{
+    width: 20%;
+}
+.btn{
+    border: none;
+    background: #012b6e;
+    color: white;
+    font-weight: bold;
+    padding: 0.25rem 1.5rem;
+    border-radius: 2vw;
+    cursor: pointer;
+}
