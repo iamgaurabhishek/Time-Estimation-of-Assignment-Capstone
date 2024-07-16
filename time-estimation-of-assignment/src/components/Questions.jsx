@@ -1,3 +1,4 @@
+import questions from '../main-questions-data/MainQuestions';
 import { signOut } from 'firebase/auth';
 import React, { useState } from 'react'
 import { firebaseAuth } from '../utils/firebase-config';
@@ -29,8 +30,8 @@ export default function Questions() {
         'design',
         'otherTask',
       ];
-        const [selectedSkills, setSelectedSkills] = useState({});
-        const [confidenceLevels, setConfidenceLevels] = useState({});
+const [selectedSkills, setSelectedSkills] = useState({});
+const [confidenceLevels, setConfidenceLevels] = useState({});
     const handleCheckboxChange = (e)=> {
         const { name, checked } = e.target;
         setSelectedSkills({
@@ -59,6 +60,66 @@ export default function Questions() {
           // Handle sign-out errors
         }
       };
+      const renderQuestion = (question) => {
+        switch(questions.id){
+            case 1:
+                return (
+                    <div key={question.id}>
+                        <div>{question.question}</div>
+                        { question.options.map((option) => (
+                            <label key={option.id}>
+                                <input type='radio' name={`assignmentRead`} value={option.text} /> {option.text}
+                            </label>
+                        ))};
+                    </div>
+                );
+            case 2:
+                return (
+                    <div key={question.id}>
+                        <div>{question.question}</div>
+                        { question.options.map((option) => (
+                            <label key={option.id}>
+                                <input type="radio" name={`completed`} value={option.text.toLowerCase()} checked={completed === option.text.toLowerCase()} onChange={handleCompleted}/> {option.text}
+                            </label>
+                        ))}
+                        {completed === 'yes' && (
+                            <div>
+                                <label>
+                                    a. How many days?
+                                    <input type='number' value={days} onChange={e => setDays(e.target.value)}/>
+                                </label>
+                                <label>
+                                    b. How many hours?
+                                    <input type='number' value={hours} onChange={e => setHours(e.target.value)}/>
+                                </label>
+                            </div>
+                        )}
+                    </div>
+                )
+            case 3:
+                return(
+                    <div key={question.id}>
+                        <div>{question.question}</div>
+                        {skills.map((skill) => (
+                            <div key={skill}>
+                                <input type="checkbox" name={skill} value={skill} onChange={handleCheckboxChange}/>
+                                {' '}
+                                {skill.charAt(0).toUpperCase() + skill.slice(1)}
+                                {selectedSkills[skill] && (
+                                    <div>
+                                        <label>
+                                            Scale your confidence levels (on a scale of 0 to 10):
+                                            <input type='range' min="0" max="10" value={confidenceLevels[skill] || ''} onchange={e => handleConfidenceChange(e, skill)}/>
+                                            <span>{confidenceLevels[skill] || "0"}</span>
+                                        </label>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )
+        }
+      }
   return (
     <div>
         <button onClick={handleSignOut}>Sign Out</button>

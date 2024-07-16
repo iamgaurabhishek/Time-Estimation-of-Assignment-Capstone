@@ -65,6 +65,64 @@ const questions = [
             }
         ],
 
+    },
+    {
+        "id": 4,
+        "question": "4. Do you fell this going to be challenging for you ?",
+        "options":[
+            {
+            "id": "yes",
+            "text": "Yes"
+            },
+            {
+            "id": "no",
+            "text": "No"
+            }
+        ],
+    },
+    {
+        "id": 5,
+        "question": "5. What is your strategy for handling unexpected delays or issues?",
+        "options":[
+            {
+                "id": "communicate",
+                "text": "Communicate with your professor why is it delayed?"
+            },
+            {
+                "id": "help",
+                "text": "Will take some help from your classmates/ professors?"
+            },
+            {
+                "id": "timeline",
+                "text": "Create a timeline for yourself and keep track of each day doings to decrease pressure during"
+            },
+            {
+                "id": "start",
+                "text": "Don't have a strategy just start doing it."
+            },
+            {
+                "id": "formally",
+                "text": "Acknowledging delay formally first?"
+            },
+            {
+                "id": "margin",
+                "text": "Leave margin for unexpected delays."
+            }
+        ],
+    },
+    {
+        "id": 6,
+        "question": "6. What is your style of working?",
+        "options":[
+            {
+                "id": "long",
+                "text": "Long uninterrupted sessions"
+            },
+            {
+                "id": "short",
+                "text": "Short sessions with breaks"
+            }
+        ],
     }
 ];
 export default questions;
