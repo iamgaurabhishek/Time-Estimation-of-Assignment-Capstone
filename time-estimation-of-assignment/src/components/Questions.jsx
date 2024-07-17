@@ -238,24 +238,3 @@ const [confidenceLevels, setConfidenceLevels] = useState({});
     </div>
   )
 }
-
-
-// Meta data using before-- for Question 3:
-{/* 3. What specific skills are required for this assignment and how confident are you in those skills? on scale of 0 to 1</div>
-                <br /><br />
-                <input type="checkbox" name='writing' value="writing" /> Writing
-                <input type="checkbox" name='data analysis' value="dataAnalysis"/> Data Analysis
-                <input type="checkbox" name='coding' value="coding"/> Coding
-                <input type="checkbox" name='research' value="research"/> Research
-                <br /><br />
-                <input type="checkbox" name='project management' value="projectManagement"/> Project Management
-                <input type="checkbox" name='communication' value="communication"/> Communication
-                <input type="checkbox" name='design' value="design"/> Design
-                <input type="checkbox" name='other task' value="otherTask"/> Other Task
-                <br /><br />
-                {check === "yes" && (
-                    <div>
-                        Scale youself?
-                        <input type="number" value={scaleValue}/>
-                    </div>
-                )} */}

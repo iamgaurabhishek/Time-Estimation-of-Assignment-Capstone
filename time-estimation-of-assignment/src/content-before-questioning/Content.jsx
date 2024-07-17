@@ -5,7 +5,7 @@ const questions = [
     },
     {
         "id": 2,
-        "text":"2.Each question will be required to answer."
+        "text":"2. Each question will be required to answer."
     },
     {
         "id": 3,
