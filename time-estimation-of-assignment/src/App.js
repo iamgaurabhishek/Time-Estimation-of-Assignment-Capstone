@@ -1,5 +1,7 @@
 // import './App.css';
-import { Routes, Route } from "react-router-dom";
+// 1. when we are using Firebase we don't need to manage our authentication tokens like JWT on the backend. The backend's role will be now is to handle data storage, sich as storing user responses on questions, but it won't need to handle user authentication or authorization directly.
+// 2. Now I have to make sure that my backend is reveiving and storing user responses and perhaps associated them with the user's UID(provided by Firebase) if necessary.
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from './components/Home';
 import SignUp from './components/SignUp';
 import LogIn from './components/LogIn';
@@ -8,7 +10,24 @@ import Welcome from './components/Welcome';
 import Questions from './components/Questions';
 import Footer from './components/Footer';
 import QuestionsCalled from "./components/QuestionsCalled";
+import { useState, useEffect } from 'react';
+import { firebaseAuth } from "./utils/firebase-config";
+import { onAuthStateChanged } from "firebase/auth";
 function App() {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(()=> {
+    const unsubsribe = onAuthStateChanged( firebaseAuth, (currentUser) =>{
+      setUser(currentUser);
+      if(currentUser){
+        navigate("/");
+      }
+    });
+
+    return() => unsubsribe();
+  }, [navigate]);
+
   return (
     <div className="App">
       <Header/>
