@@ -1,9 +1,10 @@
-// for seeding these questions insied the mongoDB please run this command : node scripts/seedQuestions.js
+// for seeding these questions insied the mongoDB please run this command : node scripts/seedQuestion.js
 
 const mongoose = require('mongoose');
 const Question = require('../models/Question');
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 // replace the mongodb://localhost with the actual mongodb url.
 
 const questions = [
@@ -41,46 +42,3 @@ Question.insertMany(questions)
         console.error(err);
         mongoose.connection.close();
     });
-
-
-// for seeding these questions insied the mongoDB please run this command : node scripts/seedQuestions.js
-
-//         "id": 3,
-//         "question": "3. What specific skills are required for this assignment and how confident are you in those skills? (on a scale of 0 to 1)",
-//         "options":[
-//             {
-//                 "id": "writing",
-//                 "text": "Writing"
-//             },
-//             {
-//                 "id": "dataAnalysis",
-//                 "text": "Data Analysis"
-//             },
-//             {
-//                 "id": "coding",
-//                 "text": "Coding"
-//             },
-//             {
-//                 "id": "research",
-//                 "text": "Research"
-//             },
-//             {
-//                 "id": "projectManagement",
-//                 "text": "Project Management"
-//             },
-//             {
-//                 "id": "communication",
-//                 "text": "Communication"
-//             },
-//             {
-//                 "id": "design",
-//                 "text": "Design"
-//             },
-//             {
-//                 "id": "other",
-//                 "text": "Other"
-//             }
-//         ],
-
-//     },
-//     {

@@ -1,38 +1,48 @@
 const express = require('express');
 const User = require('../models/User');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const admin = require('..');
 
 const router = express.Router();
 
-// Registe
-router.post('/register', async(req, res)=>{
-    const { userName, email, password } = req.body;
+const verfitFirebaseToken = async (req, res, next) => {
+    const token = req.headers.authorization?.split('Bearer')[1];
 
-    const hashedPassword = await bcrypt.hash(password,10);
-    const user = new User({ userName, email, hashedPassword });
+    if(!token){
+        return res.status(403).send('Authorization token not found');
+    }
 
     try{
-        await user.save();
-        res.status(201).send("User registered successfully");
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        req.uid = decodedToken.uid;
+        next();
     }
-    catch(error){
-        res.status(400).send(error);
+    catch(err){
+        return res.status(401).send('Unauthorized');
     }
-});
+};
 
-// Login
-router.post('/login', async(req, res)=>{
-    const {email, password} = req.body;
+router.post('/userdata', verifyFirbaseToken, async (req, res, next) => {
+    const { userName } = req.body;
+    try{
+        // let check the user exists in the database
+        let user = await User.findOne( { uid: req.uid } );
 
-    const user = await User.findOne({email});
-    if(!user) return res.status(400).send("User not found");
+        if(!user) {
+            // if the user does not exist, create a new record
+            user = new User( { uid: req.uid, userName} );
+            await user.save();
+        }
+        else {
+            // if user exists, you can update user data if needed
+            user.userName = userName;
+            await user.save();
+        }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if(!isMatch) return res.status(400).send("Invalid credentials");
-
-    const token = jwt.sign({ id: user._id}, 'secretkey');
-    res.status(200).json( { token});
+        res.status(200).send("User data saved successfully");
+    }
+    catch(err){
+        res.status(400).send(err);
+    }
 });
 
 module.exports = router;
