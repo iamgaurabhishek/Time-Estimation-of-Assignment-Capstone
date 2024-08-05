@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/aut
 import { Link, useNavigate } from 'react-router-dom'
 import "./Signup.css";
 import { firebaseAuth } from '../utils/firebase-config';
+import axios from 'axios';
 export default function SignUp() {
   const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -13,7 +14,16 @@ export default function SignUp() {
   const handleSignIn = async() =>{
     try{
       const { email, password } = formValues;
-      await createUserWithEmailAndPassword(firebaseAuth, email, password)
+      const userCredential = await createUserWithEmailAndPassword(firebaseAuth, email, password);
+      const { user } = userCredential;
+
+      await axios.post('http://localhost:5000/api/users/register', {
+        firebaseUID: user.uid,
+        email: user.email,
+        username: formValues.userName
+      });
+
+      navigate("/welcome");
     }catch(err){
       console.log(err);
     }

@@ -1,15 +1,21 @@
 import questions from '../main-questions-data/MainQuestions';
 import { signOut } from 'firebase/auth';
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { firebaseAuth } from '../utils/firebase-config';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import "./Questions.css";
 export default function Questions() {
     const navigate = useNavigate();
     const [completed, setCompleted] = useState("");
-    const [check, setCheck] = useState("");
     const [days, setDays] = useState("");
     const [hours, setHours] = useState("");
+    const [selectedSkills, setSelectedSkills] = useState({});
+    const [confidenceLevels, setConfidenceLevels] = useState({});
+    const [isFrequently, setIsFrequently] = useState(false);
+    const [ currentUser, setCurrentUser] = useState(null);
+    // the below useStates are not in use right now maybe later on these States might be considered for development purposes.
+    const [check, setCheck] = useState("");
     const [scaleValue, setScaleValue] = useState({
         writing : 0,
         dataAnalysis : 0,
@@ -27,11 +33,23 @@ export default function Questions() {
         'research',
         'projectManagement',
         'communication',
-        'design',
+        'graphic design',
         'otherTask',
       ];
-const [selectedSkills, setSelectedSkills] = useState({});
-const [confidenceLevels, setConfidenceLevels] = useState({});
+      useEffect(()=>{
+        // Set current user from Firebase authetication
+        const unsubscribe = firebaseAuth.onAuthStateChanged(user => {
+            if(user){
+                setCurrentUser(user);
+            } else {
+                navigate('/login');
+            }
+        });
+        return () => unsubscribe();
+      }, [navigate]);
+      
+
+    // Handling the checkbox changes
     const handleCheckboxChange = (e)=> {
         const { name, checked } = e.target;
         setSelectedSkills({
@@ -39,22 +57,56 @@ const [confidenceLevels, setConfidenceLevels] = useState({});
             [name] : checked,
         });
     };
+
+    //Ranging the Confidence level of the user towards the certain subject.
     const handleConfidenceChange = (e, skill)=>{
-        const { value} = e.target;
+        const { value } = e.target;
         setConfidenceLevels({
             ...confidenceLevels,
             [skill] : value,
         });
     };
-    const [isFrequently , setIsFrequently] = useState(false);
+    
     const handleCompleted = (e)=>{
         setCompleted(e.target.value);
     }
+
+    const calculateEstimatedTime = (answers) => {
+        // Implement your time estimation logic here
+        // For now, returning a dummy estimated time
+        return{
+            days: days ? parseInt(days) : 0,
+            hours: hours? parseInt(hours) : 0
+        };
+    };
+
+    const handleSubmit = async () => {
+        const answers = {
+            completed,
+            days,
+            hours,
+            selectedSkills,
+            confidenceLevels,
+            isFrequently,
+        };
+        const estimatedTime = calculateEstimatedTime(answers);
+        try{
+            await axios.post('http://localhost:5000/api/assignments/submit', {
+                userId : currentUser.uid,
+                answers,
+                estimatedTime,
+            });
+            navigate('/results');
+        }
+        catch(err){
+            console.error('Error submitting answers:', err);
+        }
+    };
     const handleSignOut = async () => {
         try {
           await signOut(firebaseAuth);
           navigate("/")
-          // Handle successful sign-out (e.g., redirect, update UI)
+          // Handle successfull sign-out (e.g., redirect, update UI)
         } catch (error) {
           console.error('Error signing out:', error);
           // Handle sign-out errors
@@ -125,8 +177,7 @@ const [confidenceLevels, setConfidenceLevels] = useState({});
         <button onClick={handleSignOut}>Sign Out</button>
       <h1>You have to answer these question.</h1>
 
-      <form action="">
-        <div>
+      <form>
             <label>
                 <div className='question'>1. Did you read your Assignment completely? Because it is really vital to know your Assignment!</div>
                 <div>
@@ -164,7 +215,7 @@ const [confidenceLevels, setConfidenceLevels] = useState({});
             </label>
             <label>
                 <div className='question'>
-                    3. What specific skills are required for this assignment and how confident are you in those skills? (on a scale of 0 to 1)
+                    3. What specific skills are required for this assignment and how confident are you in those skills? (on a scale of 0 to 10)
                 </div>
                 <br></br>
                 {skills.map((skill)=> (
@@ -232,9 +283,9 @@ const [confidenceLevels, setConfidenceLevels] = useState({});
                 </div>
                 }
             </label>
-        </div>
+        <button type='button' onClick={handleSubmit}>Submit My Answers</button>
       </form>
-      <button>Submit My Answers</button>
+      
     </div>
   )
 }
