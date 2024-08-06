@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { createUserWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { Link, useNavigate } from 'react-router-dom'
 import "./Signup.css";
@@ -9,8 +9,10 @@ export default function SignUp() {
   const [formValues, setFormValues] = useState({
     userName : "",
     email: "",
-    password : ""
-  })
+    password : "",
+  });
+
+  const [user, setUser] = useState(null); 
   const handleSignIn = async() =>{
     try{
       const { email, password } = formValues;
@@ -23,15 +25,31 @@ export default function SignUp() {
         username: formValues.userName
       });
 
-      navigate("/welcome");
+      setUser(user); // Set the user state to trigger the useEffect for navigation
+      // navigate("/welcome");
     }catch(err){
       console.log(err);
     }
-  }
+  };
 
-  onAuthStateChanged(firebaseAuth, (currentUser)=>{
-    if(currentUser) navigate("/welcome")
-  })
+  useEffect(()=> {
+    const unsubscribe = onAuthStateChanged(firebaseAuth, (currentUser) => {
+      if(currentUser) {
+        setUser(currentUser); // Set the user state if authenticated
+      }
+    });
+    return () => unsubscribe(); // Cleanup the listener on unmount
+  }, []);
+
+  useEffect(() => {
+    if (user){
+      navigate("/welcome"); // Navigate only when user is set
+    }
+  }, [user, navigate]);
+
+  // onAuthStateChanged(firebaseAuth, (currentUser)=>{
+  //   if(currentUser) navigate("/welcome")
+  // })
   return (
     <div>
       <h2>Sign Up</h2>

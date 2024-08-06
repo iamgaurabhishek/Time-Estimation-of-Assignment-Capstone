@@ -30,14 +30,21 @@ function App() {
 
   return (
     <div className="App">
+      {/*1.  Header Component */}
       <Header/>
       <Routes>
+        {/* 2. Home Component */}
         <Route path='/' element={<Home/>}/>
+        {/* 3. Sign Up Component */}
         <Route path='/signup' element={<SignUp/>} />
+        {/* 4. Log In Component */}
         <Route path='/login' element={<LogIn />} />
+        {/* 5. Welcome Component */}
         <Route path='/welcome' element={<Welcome/>}/>
+        {/* 6. Questions Called Component */}
         <Route path='/questions' element={<QuestionsCalled/>} />
       </Routes>
+      {/* 7. Footer Component */}
       <Footer/>
     </div>
   );

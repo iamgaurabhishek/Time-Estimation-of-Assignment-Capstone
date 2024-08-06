@@ -1,9 +1,10 @@
-import React from 'react'
+import React from 'react';
 import logo from "../assets/FOCUS_FUTURE.png";
 import "./Header.css";
 import { useNavigate } from 'react-router-dom';
 export default function Header(props) {
     const navigate = useNavigate();
+    
   return (
     <div className='header'>
       <img className='logo' src={logo} alt="logo" />

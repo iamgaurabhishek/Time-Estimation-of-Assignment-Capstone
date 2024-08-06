@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import "./Home.css";
 import Lottie from "lottie-react";
 import { Link } from 'react-router-dom';
