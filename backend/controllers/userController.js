@@ -4,7 +4,7 @@ const admin = require('firebase-admin');
 exports.registerUser = async (req, res)=>{
     const { email, firebaseUID, username } = req.body;
     try {
-        let user = await User.findOne({ firebaseUID});
+        let user = await User.findOne({ firebaseUID });
 
         if(!user){
             user = new User({

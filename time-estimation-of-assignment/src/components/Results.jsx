@@ -8,7 +8,7 @@ export default function Results(){
 
     useEffect(()=> {
         const fetchAssignment = async () => {
-            const response = await axios.get(`http://localhost:5000/api/assignments/${userId}`);
+            const response = await axios.get(`http://localhost:5000/api/assignments${userId}`);
             setAssignment(response.data);
         };
         fetchAssignment();

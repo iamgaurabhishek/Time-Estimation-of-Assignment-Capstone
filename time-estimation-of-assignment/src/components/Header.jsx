@@ -9,7 +9,6 @@ export default function Header(props) {
     <div className='header'>
       <img className='logo' src={logo} alt="logo" />
 
-      {/* <button className='btn' onClick={()=> navigate('/signup')}>      */}
       <Link to="/signup" className="btn">
         Sign Up
       </Link>

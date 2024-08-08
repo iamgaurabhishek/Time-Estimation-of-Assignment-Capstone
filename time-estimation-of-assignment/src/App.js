@@ -13,6 +13,7 @@ import QuestionsCalled from "./components/QuestionsCalled";
 import { useState, useEffect } from 'react';
 import { firebaseAuth } from "./utils/firebase-config";
 import { onAuthStateChanged } from "firebase/auth";
+import Results from "./components/Results";
 function App() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -43,19 +44,13 @@ function App() {
           <Route path='/welcome' element={<Welcome/>}/>
           {/* 6. Questions Called Component */}
           <Route path='/questions' element={<QuestionsCalled/>} />
+          {/* 7. Results Component*/}
+          <Route path='/results' element={<Results/>} />
         </Routes>
-        {/* 7. Footer Component */}
+        {/* 8. Footer Component */}
         <Footer/>
     </div>
   );
 }
 
 export default App;
-
-// export default function AppWithRouter(){
-//   return (
-//     <Router>
-//       <App />
-//     </Router>
-//   );
-// };
