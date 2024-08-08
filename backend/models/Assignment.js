@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const AssignmentSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String, // Change from ObjectId to String
         ref: 'User',
         required: true,
     },

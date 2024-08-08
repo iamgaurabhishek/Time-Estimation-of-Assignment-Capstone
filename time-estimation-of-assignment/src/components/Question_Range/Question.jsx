@@ -15,7 +15,7 @@ const Question = ({ question, index, answer, onAnswer }) => {
                         <label>
                             <input
                                 type="checkbox"
-                                checked={answer && answer.includes(option.id)}
+                                checked={answer ? answer.includes(option.id) : false}
                                 onChange={() => handleChange(option.id)}
                             />
                             {option.text}

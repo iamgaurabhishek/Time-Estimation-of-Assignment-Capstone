@@ -1,4 +1,5 @@
 const Assignment = require('../models/Assignment');
+const mongoose = require('mongoose');
 
 exports.submitAnswers = async (req, res)=> {
     const { userId, answers, estimatedTime } = req.body;
@@ -6,7 +7,7 @@ exports.submitAnswers = async (req, res)=> {
     try{
         const assignment = new Assignment({
             user: userId,
-            answers,
+            answers: Object.fromEntries(answers.entries()), // Convert Map to plain object
             estimatedTime,
         });
 
@@ -23,6 +24,9 @@ exports.submitAnswers = async (req, res)=> {
 exports.getAssignments = async (req, res) =>{
     try{
         const assignments =  await Assignment.find({ user: req.params.userId });
+        if(assignments.length === 0){
+            return res.status(404).json({ msg: "No assignments found for this user."})
+        }
         res.json(assignments);
     }
     catch(err){

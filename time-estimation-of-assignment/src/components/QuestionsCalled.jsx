@@ -3,7 +3,7 @@ import questions from "../main-questions-data/MainQuestions";
 import Question from './Question_Range/Question';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { firebaseAuth } from '../utils/firebase-config';
 
 const QuestionsCalled = () =>{
@@ -58,7 +58,18 @@ const QuestionsCalled = () =>{
             alert('There was a problem submitting your responses. Please try again.')
         }
     }
-
+    // 5. Sign out functionality for users to come out of the survey
+    const handleSignOut = async () => {
+        try{
+            await signOut(firebaseAuth);
+            navigate('/login'); // Redirect to the login page after sign-out
+        }
+        catch(err){
+            console.error('Error signing out: ', err);
+            alert("There was an error siging out. Please try again");
+        }
+    }
+    //--------------------------------------
     const isAnswered = answers[currentQuestion] !== null;
     return(
         <div>
@@ -73,7 +84,10 @@ const QuestionsCalled = () =>{
                 {isAnswered && currentQuestion < questions.length - 1 && <button onClick={nextQuestion}>Next</button>}
             </div>
             <div>
-                {answers.every(answer => answer !== null) && <button onClick={() => navigate("/results")}>Submit</button>}
+                {answers.every(answer => answer !== null) && <button onClick={submitResponses}>Submit</button>}
+            </div>
+            <div>
+                <button onClick={handleSignOut}>Sign Out</button>
             </div>
         </div>
     )
