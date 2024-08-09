@@ -13,7 +13,6 @@ const QuestionsCalled = () =>{
     const [currentQuestion, setCurrentQuestion] = useState(0);
     // 3. State to sort the user's answers
     const [answers, setAnswers] = useState(Array(questions.length).fill(null));
-
     // 5. State for setting up the userId
     const [userId, setUserId] = useState(null);
 
@@ -42,17 +41,15 @@ const QuestionsCalled = () =>{
             setCurrentQuestion(currentQuestion - 1);
         }
     };
-    
-  
     // 4. Creating a function to submit responses to sends the collected answer to the backend API when the user completes the questionnaire.
     const submitResponses = async () => {
         try{
             const response = await axios.post("http://localhost:5000/api/assignments/submit", {
                 userId: userId,
                 answers: answers,
-                estimatedTime: {days: 0, hours:0 } //Replace with your calculated estimated time
+                estimatedTime: {days: 2, hours:2} //Replace with your calculated estimated time
             });
-            navigate('/results'); // Navigate to the results page after submission
+            navigate(`/results/${userId}`); // Navigate to the results page after submission
         }catch(err){
             console.error("Error submitting responses: ", err);
             alert('There was a problem submitting your responses. Please try again.')

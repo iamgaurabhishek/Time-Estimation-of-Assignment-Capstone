@@ -7,6 +7,7 @@ export default function Results(){
     const { userId } = useParams();
 
     useEffect(() => {
+        console.log("UserId from Params: ", userId);  // Debugging to verfify `userId`.
         const fetchAssignment = async () => {
             try{
                 const response = await axios.get(`http://localhost:5000/api/assignments/${userId}`);
@@ -22,7 +23,7 @@ export default function Results(){
                 console.error("Error fetching assignment data: ",err);
             }
         };
-        fetchAssignment();
+            fetchAssignment();
     }, [userId]);
 
     if(!assignment) {
